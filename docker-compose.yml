@@ -1,5 +1,4 @@
-
-version: '3'
+version: "3"
 
 services:
   api-solid-pg:
@@ -10,4 +9,3 @@ services:
       - POSTGRESQL_USERNAME=docker
       - POSTGRESQL_PASSWORD=docker
       - POSTGRESQL_DATABASE=apisolid
-
