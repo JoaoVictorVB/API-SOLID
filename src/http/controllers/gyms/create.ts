@@ -3,24 +3,24 @@ import { z } from "zod";
 import { makeCreateGymUseCase } from "@/use-cases/factories/make-create-gym-use-case";
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
-  const createGymUseCase = z.object({
+  const createGymBodySchema = z.object({
     title: z.string(),
     description: z.string().nullable(),
     phone: z.string().nullable(),
-    latitude: z.number().refine((value) => {
+    latitude: z.coerce.number().refine((value) => {
       return Math.abs(value) <= 90;
     }),
-    longitude: z.number().refine((value) => {
-      return Math.abs(value) <= 100;
+    longitude: z.coerce.number().refine((value) => {
+      return Math.abs(value) <= 180;
     }),
   });
 
   const { title, description, phone, latitude, longitude } =
-    createGymUseCase.parse(request.body);
+    createGymBodySchema.parse(request.body);
 
-  const createGym = makeCreateGymUseCase();
+  const createGymUseCase = makeCreateGymUseCase();
 
-  await createGym.execute({
+  await createGymUseCase.execute({
     title,
     description,
     phone,
